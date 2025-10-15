@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relay Status</title>
+</head>
+<body>
+    <h2>Relay Status:</h2>
+    <h1 id="relay_status" style="color: blue;">Waiting...</h1>
+
+    <script>
+        const socket = new WebSocket("ws://localhost:8000/ws/relay/");
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const statusElem = document.getElementById("relay_status");
+
+            if (data.status === "triggered") {
+                statusElem.innerText = "?? Relay Triggered!";
+                statusElem.style.color = "red";
+            } else {
+                statusElem.innerText = "? Relay Released";
+                statusElem.style.color = "green";
+            }
+        };
+
+        socket.onopen = () => console.log("WebSocket Connected!");
+        socket.onclose = () => console.log("WebSocket Disconnected!");
+    </script>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Keyboard Data</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; }
+        #message { margin-top: 1rem; padding: 1rem; border: 1px solid #ccc; background: #f9f9f9; }
+        #error { color: red; }
+        #data { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Keyboard Data</h1>
+
+    <div id="message">
+        Loading data...
+    </div>
+
+    <script>
+        // On page load, call your Django endpoint to get data
+        window.onload = function() {
+            fetch(window.location.href, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // If server returns HTTP error, read JSON to get error message
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                // If data contains 'data' key, show it
+                if (data.data) {
+                    document.getElementById('message').innerHTML = `<div id="data">Data found: <pre>${JSON.stringify(data.data, null, 2)}</pre></div>`;
+                } else {
+                    document.getElementById('message').textContent = 'No data found.';
+                }
+            })
+            .catch(err => {
+                // Show error message from server
+                document.getElementById('message').innerHTML = `<div id="error">Error: ${err.error || 'Unknown error'}</div>`;
+            });
+        };
+    </script>
+</body>
+</html> -->
