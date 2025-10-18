@@ -157,7 +157,7 @@ windows activate
 
 ethernet value:
 
-    sudo ip addr add 192.168.137.220/24 dev eth0
+    sudo ip addr add 192.168.5.100/24 dev eth0
     sudo ip link set eth0 up
 
 
@@ -174,7 +174,7 @@ Step 2: Configure FreeTDS
     sudo nano /etc/freetds/freetds.conf
 
     [SSMS]
-    host = 192.168.137.1   # your Windows IP
+    host = 192.168.5.102   # your Windows IP
     port = 1433
     tds version = 7.4
 
@@ -216,14 +216,14 @@ IF ERROR OCCURE :
         ADD
             [SSMS]
             Driver   = FreeTDS
-            Server   = 192.168.137.1
+            Server   = 192.168.5.102
             Port     = 1433
             TDS_Version = 7.4
-            Database = YourDBName
+            Database = GaugeLogic_2CH
 
     4. Test connection
 
-        isql -v SSMS gauge gauge@9999
+        isql -v SSMS sa ezc
 
         +---------------------------------------+
         | Connected!                            |
@@ -255,6 +255,18 @@ sudo nmcli con mod "eth0-dhcp" ipv4.addresses 192.168.5.100/24
 sudo nmcli con mod "eth0-dhcp" ipv4.gateway 192.168.5.1
 sudo nmcli con mod "eth0-dhcp" ipv4.dns "8.8.8.8 8.8.4.4"
 sudo nmcli con mod "eth0-dhcp" ipv4.method manual
+
+
+
+or
+
+
+
+sudo nmcli con mod "Wired connection 1" ipv4.addresses 192.168.5.100/24
+sudo nmcli con mod "Wired connection 1" ipv4.gateway 192.168.5.1
+sudo nmcli con mod "Wired connection 1" ipv4.dns "8.8.8.8 8.8.4.4"
+sudo nmcli con mod "Wired connection 1" ipv4.method manual
+
 
 
 

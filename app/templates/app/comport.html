@@ -1347,7 +1347,7 @@ function createTimeInputPad() {
         buttons.push(createButton(symbolKey, function () { handleSymbolClick(symbolKey); }));
 
         numberPad.appendChild(document.createElement("br"));
-        buttons.push(createButton("TAB", addSpace));
+        buttons.push(createButton("␣", addSpace));
         buttons.push(createButton("C", clearLastCharacter));
         buttons.push(createButton("OK", hideNumberPad));
     }
@@ -2077,3 +2077,6 @@ existingRows.forEach(row => {
     
 </body>
 </html>
+
+
+

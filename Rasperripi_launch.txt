@@ -38,3 +38,98 @@ crontab -e
 
 1st one la use pannu paste at the last
 @reboot startx
+
+
+
+
+
+
+
+this is auto star da 
+
+
+mkdir -p ~/.config/autostart
+
+nano ~/.config/autostart/eight_channel.desktop
+
+
+[Desktop Entry]
+Type=Application
+Name=Eight Channel
+Exec=/bin/bash -c "sleep 5 && /usr/local/bin/eight_channel/eight_channel"
+X-GNOME-Autostart-enabled=true
+
+
+
+
+
+
+RTC
+
+
+sudo apt update
+sudo apt install -y i2c-tools
+sudo i2cdetect -y 1
+
+
+sudo apt install -y python3-smbus hwclock
+
+
+sudo nano /boot/config.txt
+
+	dtoverlay=i2c-rtc,ds3231
+
+
+
+
+1️⃣ Check which RTC is which
+
+	dmesg | grep rtc
+
+You’ll see lines like:
+	rtc-ds3231 1-0068: registered as rtc1
+This confirms DS3231 is rtc1.
+
+
+
+2️⃣ Force system to use RTC1 (DS3231)
+	sudo nano /etc/udev/rules.d/85-hwclock.rules
+Add this line:
+	KERNEL=="rtc1", SYMLINK+="rtc", OPTIONS+="link_priority=10"
+
+
+
+
+sudo reboot
+ls -l /dev/rtc*
+
+
+✅ You should now see /dev/rtc pointing to /dev/rtc1.
+
+	sudo hwclock -f /dev/rtc1 -s
+	sudo hwclock -f /dev/rtc1 -w
+	date
+	sudo hwclock -f /dev/rtc1 --show
+
+
+
+4️⃣ Make RTC1 auto-load time on every boot
+
+sudo nano /etc/systemd/system/rtc1-sync.service
+
+
+[Unit]
+Description=Sync system clock from DS3231 RTC1
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/hwclock -f /dev/rtc1 -s
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+sudo systemctl enable rtc1-sync.service

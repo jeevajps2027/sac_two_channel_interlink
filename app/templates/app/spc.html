@@ -132,7 +132,7 @@ color: white;
             <label for="cpk">CPK:</label>
             <input type="text" id="cpk" >
         </div>
-    <div class="container-2" style="overflow-y: auto;">
+    <div class="container-2" style="overflow-y: auto;overflow-x: auto;">
     </div>
     <div class="container-3">
     </div>
@@ -420,31 +420,31 @@ window.addEventListener('load', function () {
 
 
 
-const keyboardSocket = new WebSocket("ws://" + window.location.host + "/ws/keypad/");
-const parameterButton = document.getElementById("parameter_button");
+// const keyboardSocket = new WebSocket("ws://" + window.location.host + "/ws/keypad/");
+// const parameterButton = document.getElementById("parameter_button");
 
-keyboardSocket.onmessage = function (event) {
-    const data = JSON.parse(event.data);
-    const key = data.key;
+// keyboardSocket.onmessage = function (event) {
+//     const data = JSON.parse(event.data);
+//     const key = data.key;
 
-    switch (key) {
-        case "F3":
-            document.getElementById("exit_btn").click();
-            break;
+//     switch (key) {
+//         case "F3":
+//             document.getElementById("exit_btn").click();
+//             break;
 
-            case "ENT":
-            if (isNotificationOpen) {
-                document.getElementById("notificationOkBtn").click();
-                // Delay focus restoration to ensure modal closes first
-                setTimeout(() => {
-                    document.getElementById("parameter_button").focus();
-                }, 100);  // 100ms delay is usually enough
-            } else if (document.activeElement === parameterButton) {
-                parameterButton.click(); // Triggers cycleParameterName()
-            }
-            break;
-    }
-};
+//             case "ENT":
+//             if (isNotificationOpen) {
+//                 document.getElementById("notificationOkBtn").click();
+//                 // Delay focus restoration to ensure modal closes first
+//                 setTimeout(() => {
+//                     document.getElementById("parameter_button").focus();
+//                 }, 100);  // 100ms delay is usually enough
+//             } else if (document.activeElement === parameterButton) {
+//                 parameterButton.click(); // Triggers cycleParameterName()
+//             }
+//             break;
+//     }
+// };
 
 
 
@@ -452,3 +452,37 @@ keyboardSocket.onmessage = function (event) {
 </script>
 </body>
 </html>
+
+
+
+<style>
+
+* {
+    -webkit-user-select: none !important; 
+    -moz-user-select: none !important;    
+    -ms-user-select: none !important;     
+    user-select: none !important;         
+    -webkit-user-drag: none !important;   
+    -webkit-tap-highlight-color: transparent !important; 
+    outline: none !important;
+}
+
+
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+*:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+</style>
+
+<script>
+
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('mousedown', e => e.preventDefault());
+document.addEventListener('mouseup', e => e.preventDefault());
+document.addEventListener('dragstart', e => e.preventDefault());
+document.addEventListener('contextmenu', e => e.preventDefault()); // Disable right-click
+</script>

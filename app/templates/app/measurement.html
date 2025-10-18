@@ -156,19 +156,7 @@
 }
 
 
-#spc_btn,#report_btn{
-    width: 15%;
-    height: 80%;
-    margin-left: 5%;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.2vw;
-    color: black;
-    border: 2px solid black;
-    font-family:'Courier New', Courier, monospace;
-    background-color: rgb(240, 189, 95);
-   
-}
+
 
 .focused-report-button {
   outline: 3px solid blue;
@@ -281,9 +269,9 @@
 
 .punch_no-box {
   background-color: white;
-  width: 75%;
+  width: 74%;
   height: 15%;
-  padding: 10px;
+  padding: 5px;
   margin-bottom: 5%;       /* Distance from bottom */
   margin-left: 5%;         /* Distance from the left */
   
@@ -329,7 +317,7 @@
     background-color: white;
   width: 15%;
   height: 15%;
-  padding: 10px;
+  padding: 5px;
   margin-bottom: 5%;       /* Distance from bottom */
   margin-right: 2%;        /* Distance from the left */
  
@@ -342,8 +330,8 @@
 }
 #enter_btn_main{
     background-color: #0f0f;
-    height: 90%;
-    width: 90%;
+    height: 100%;
+    width: 100%;
    
     font-weight: bold;
     font-size: 3vw;
@@ -446,10 +434,11 @@
     border: 1px solid #aaa;
     border-radius: 5px;
     padding: 4px 8px;
-    font-size: 2vw;
+    font-size: 3vw;
     font-weight: bold;
     outline: none;
 }
+
 
 .tapper_container input:focus {
     border-color: #007bff;         /* blue border on focus */
@@ -487,8 +476,64 @@ height: 50px;
    
 }
 
+.custom_table {
+    border-collapse: collapse; /* remove all spacing between cells */
+    width: 100%;
+    border: 1px solid black; /* define outer border */
+}
+
+.custom_table th,
+.custom_table td {
+    border: 1px solid black; /* define cell borders */
+    padding: 0;              /* remove inner spacing */
+    margin: 0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.custom_table input[type="text"] {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+    font-size: 3vw;
+    text-align: center;
+    box-sizing: border-box;  /* ensures input fits cell perfectly */
+   
+}
+
+/* Optional: Make the table visually tighter */
+.output_container {
+    margin: 0;
+    padding: 0;
+}
+
+.custom_table th{
+    font-size: 2vw;
+    height: 70px;
+}
+
+.container-3-2-btn{
+    width: 22%;
+    height: 80%;
+    margin-left: 2%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2.2vw;
+    color: white;
+    border: 2px solid black;
+    font-family:'Courier New', Courier, monospace;
+    background-color: orangered;
+   
+}
+
+
+
+
     </style>
-    
+
     
 </head>
 <body>
@@ -505,7 +550,7 @@ height: 50px;
             <input type="text" id="date_time" readonly>
             <input type="text" id="operator" readonly>
             <input type="text" id="shift" class="shift-name">
-            <input type="text" id="message" style="margin-left: 1%;color: white;font-size: 1.2vw;" readonly>
+            <input type="text" id="message" style="width: 12%;color: white;font-size: 1.2vw;" readonly>
 
             <input type="text" id="mssql_status" style="margin-left: 1%;" readonly>
 
@@ -529,7 +574,7 @@ height: 50px;
             <input type="text" id="total" readonly>
         </div>
         <div class="container-1-3">
-            <input type="text" id="punch_no_display">
+            <input type="text" id="punch_no_display" style="background-color: yellow;">
             <input type="text" id="notification_bar" readonly value="DO MEASUREMENT">
             <input type="text" id="overall_status" readonly>
         </div>
@@ -615,9 +660,9 @@ height: 50px;
 <div class="output_container" id="output_values_container" style="overflow-y: auto;">
     <div>
         <table border="1" width="100%" class="custom_table">
-            <thead>
+            <thead >
                 <tr id="param_header_row">
-                    <th>VALUES</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="table_body">
@@ -630,8 +675,11 @@ height: 50px;
 
         <div class="tapper_container">
             <label for="tapper">TAPPER</label>
-            <input type="text" id="tapper" style="font-size: 2vw;">
+            <input type="text" id="tapper" style="font-size: 3vw;" readonly>
         </div>
+
+         <textarea id="probe-A"></textarea>
+        <textarea id="probe-B"></textarea>
 
          
     </div>
@@ -778,6 +826,16 @@ height: 50px;
 
    
 <script>
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const inputs = document.querySelectorAll("input");
+    inputs.forEach(input => input.setAttribute("autocomplete", "off"));
+});
+
+
+
  async function refreshStatus() {
   try {
     const res = await fetch("/mssql-status/");
@@ -1407,7 +1465,7 @@ refreshStatus();
                                         .then(deleteData => {
                                             showNotifications(deleteData.message); // Show success/error message
                                           
-                                            location.reload();
+                                            // location.reload();
                                             if (deleteData.success) {
                                                 document.getElementById('punch_overwrite').style.display = 'none';
                                                 $('#punch_overwrite').hide();
@@ -1680,7 +1738,7 @@ const minRow = document.getElementById("min_row");
 const tirRow = document.getElementById("tir_row");
 
 // Clear existing rows
-headerRow.innerHTML = "<th>VALUES</th>";
+headerRow.innerHTML = "<th></th>";
 curRow.innerHTML = "<td>CUR</td>";
 maxRow.innerHTML = "<td>MAX</td>";
 minRow.innerHTML = "<td>MIN</td>";
@@ -1705,12 +1763,11 @@ parameterNames.forEach((name, index) => {
 
     // Add parameter name to header
     headerRow.innerHTML += `<th>${name}</th>`;
-
-    // Add value cells
-    curRow.innerHTML += `<td><input type="text" id="cur_${i}" value="${output}" style="font-size:2vw; width:90%;"></td>`;
-    maxRow.innerHTML += `<td><input type="text" id="max_${i}" value="${max_value}" style="font-size:2vw; width:90%;"></td>`;
-    minRow.innerHTML += `<td><input type="text" id="min_${i}" value="${min_value}" style="font-size:2vw; width:90%;"></td>`;
-    tirRow.innerHTML += `<td><input type="text" id="tir_${i}" value="${tir_value}" style="font-size:2vw; width:90%;"></td>`;
+   
+  curRow.innerHTML += `<td><input type="text" id="cur_${i}" value="${output}"></td>`;
+maxRow.innerHTML += `<td><input type="text" id="max_${i}" value="${max_value}"></td>`;
+minRow.innerHTML += `<td><input type="text" id="min_${i}" value="${min_value}"></td>`;
+tirRow.innerHTML += `<td><input type="text" id="tir_${i}" value="${tir_value}"></td>`;
 
     // 🌈 Apply color logic for CUR value
     if (!clearFlag) {
@@ -1752,7 +1809,11 @@ parameterNames.forEach((name, index) => {
 
     
     
-    
+    document.querySelectorAll(".custom_table input[type='text']").forEach(input => {
+    input.readOnly = true;
+});
+
+
     
     
     
@@ -2868,28 +2929,23 @@ function updateTableValues(step, indices, parameterNames, container, matchedGaug
     const minRow = document.getElementById("min_row");
     const tirRow = document.getElementById("tir_row");
 
-    if (!Array.isArray(parameterNames) || parameterNames.length === 0) {
-        console.error("parameterNames array is empty or invalid:", parameterNames);
-        return;
+    // ✅ Only clear when it's the FIRST step
+    if (step === 1) {
+        headerRow.innerHTML = "<th></th>";
+        curRow.innerHTML = "<td>CUR</td>";
+        maxRow.innerHTML = "<td>MAX</td>";
+        minRow.innerHTML = "<td>MIN</td>";
+        tirRow.innerHTML = "<td>TIR</td>";
+        globalColumnCounter = 0;
     }
 
-    // 🧹 Clear previous headers and values before adding new ones
-    headerRow.innerHTML = "<th>VALUES</th>";
-    curRow.innerHTML = "<td>CUR</td>";
-    maxRow.innerHTML = "<td>MAX</td>";
-    minRow.innerHTML = "<td>MIN</td>";
-    tirRow.innerHTML = "<td>TIR</td>";
-
-    // Reset column counter
-    globalColumnCounter = 0;
-
-    // 🟢 Loop through each parameter name and add its column
+    // 🟢 Add columns for the current step (without clearing previous)
     indices.forEach((index, colNumber) => {
         globalColumnCounter++;
         const gaugeIndex = matchedGauges[colNumber];
         const paramName = parameterNames[colNumber] || `PARAM_${colNumber + 1}`;
 
-        // Source gauge fields
+        // Gauge data sources
         const outputBox = document.getElementById(`Output_box${gaugeIndex}`);
         const maxBox = document.getElementById(`max${gaugeIndex}`);
         const minBox = document.getElementById(`min${gaugeIndex}`);
@@ -2900,23 +2956,21 @@ function updateTableValues(step, indices, parameterNames, container, matchedGaug
             return;
         }
 
-        // Add parameter header
+        // 🧩 Append new parameter column
         headerRow.innerHTML += `<th>${paramName}</th>`;
+        curRow.innerHTML += `<td><input type="text" id="cur_${globalColumnCounter}" value="${outputBox.value}" readonly></td>`;
+        maxRow.innerHTML += `<td><input type="text" id="max_${globalColumnCounter}" value="${maxBox.value}" readonly></td>`;
+        minRow.innerHTML += `<td><input type="text" id="min_${globalColumnCounter}" value="${minBox.value}" readonly></td>`;
+        tirRow.innerHTML += `<td><input type="text" id="tir_${globalColumnCounter}" value="${tirBox.value}" readonly></td>`;
 
-        // Add data for CUR, MAX, MIN, TIR rows
-        curRow.innerHTML += `<td><input type="text" id="cur_${globalColumnCounter}" value="${outputBox.value}" style="width:90%;font-size:2vw;"></td>`;
-        maxRow.innerHTML += `<td><input type="text" id="max_${globalColumnCounter}" value="${maxBox.value}" style="width:90%;font-size:2vw;"></td>`;
-        minRow.innerHTML += `<td><input type="text" id="min_${globalColumnCounter}" value="${minBox.value}" style="width:90%;font-size:2vw;"></td>`;
-        tirRow.innerHTML += `<td><input type="text" id="tir_${globalColumnCounter}" value="${tirBox.value}" style="width:90%;font-size:2vw;"></td>`;
-
-        // Apply color logic (copy background color from gauge)
+        // 🟡 Copy background color from output box (for status display)
         const bgColor = window.getComputedStyle(outputBox).backgroundColor;
         document.getElementById(`cur_${globalColumnCounter}`).style.backgroundColor = bgColor;
     });
 
-    // 🟣 Update tapper value (difference between tir_1 and tir_2)
-    const tir1 = parseFloat(document.getElementById("tir_1")?.value || 0);
-    const tir2 = parseFloat(document.getElementById("tir_2")?.value || 0);
+    // 🟣 Update TAPPER (difference between TIR 1 and TIR 2)
+    const tir1 = parseFloat(document.getElementById("tir_1")?.value || NaN);
+    const tir2 = parseFloat(document.getElementById("tir_2")?.value || NaN);
     const tapperInput = document.getElementById("tapper");
 
     if (tapperInput && !isNaN(tir1) && !isNaN(tir2)) {
@@ -3661,7 +3715,7 @@ function setDateTimes() {
     // Function to display "Connected" message
     function displayConnected() {
         const messageBox = document.getElementById("message");
-        messageBox.value = "CONNECTED";
+        messageBox.value = "✅ COM Connected ";
         messageBox.style.color = "white";
         messageBox.style.backgroundColor = "green";
     }
@@ -3669,7 +3723,7 @@ function setDateTimes() {
     // Function to display "Disconnected" message
     function displayDisconnected() {
         const messageBox = document.getElementById("message");
-        messageBox.value = "Disconnected";
+        messageBox.value = "❌ COM Disconnected";
         messageBox.style.color = "black";
         messageBox.style.backgroundColor = "red";
     }
@@ -4321,3 +4375,85 @@ function setDateTimes() {
         
     </body>
     </html>
+
+
+
+
+
+
+<!-- 
+<style>
+
+* {
+    -webkit-user-select: none !important; 
+    -moz-user-select: none !important;    
+    -ms-user-select: none !important;     
+    user-select: none !important;         
+    -webkit-user-drag: none !important;   
+    -webkit-tap-highlight-color: transparent !important; 
+    outline: none !important;
+}
+
+
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+*:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+</style>
+
+<script>
+
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('mousedown', e => e.preventDefault());
+document.addEventListener('mouseup', e => e.preventDefault());
+document.addEventListener('dragstart', e => e.preventDefault());
+document.addEventListener('contextmenu', e => e.preventDefault()); // Disable right-click
+</script> -->
+
+
+
+
+
+
+
+   <style>
+/* Make everything non-selectable by default */
+* {
+    -webkit-user-select: none !important; 
+    -moz-user-select: none !important;    
+    -ms-user-select: none !important;     
+    user-select: none !important;         
+    -webkit-user-drag: none !important;   
+    -webkit-tap-highlight-color: transparent !important; 
+    outline: none !important;
+}
+
+/* Keep focus styles removed */
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+*:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+</style>
+
+<script>
+// Helper: check if event target is one of the allowed inputs
+function isEditableArea(target) {
+    const allowedIds = ['probe-A', 'probe-B', 'probe-C','probe-D', 'punch_no', 'password_punch'];
+    return allowedIds.includes(target.id);
+}
+
+// Disable selection / dragging except allowed areas
+document.addEventListener('selectstart', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('mousedown', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('mouseup', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('dragstart', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('contextmenu', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+</script>

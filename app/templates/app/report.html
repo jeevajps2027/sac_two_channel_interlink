@@ -829,3 +829,43 @@ $('#search_btn').click(function (event) {
     </script>
 </body>
 </html>
+
+
+
+   <style>
+/* Make everything non-selectable by default */
+* {
+    -webkit-user-select: none !important; 
+    -moz-user-select: none !important;    
+    -ms-user-select: none !important;     
+    user-select: none !important;         
+    -webkit-user-drag: none !important;   
+    -webkit-tap-highlight-color: transparent !important; 
+    outline: none !important;
+}
+
+/* Keep focus styles removed */
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+*:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+</style>
+
+<script>
+// Helper: check if event target is one of the allowed inputs
+function isEditableArea(target) {
+    const allowedIds = ['shift_select','status_select','mode','mail_select','from_date','to_date'];
+    return allowedIds.includes(target.id);
+}
+
+// Disable selection / dragging except allowed areas
+document.addEventListener('selectstart', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('mousedown', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('mouseup', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('dragstart', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('contextmenu', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+</script>

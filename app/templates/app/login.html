@@ -324,9 +324,7 @@ margin-top: 1%;
     <div class="subcontainer-1"  id="subcontainer-1">
         <div class="label_input">
         
-            <!-- <input type="text" id="user_id" placeholder="USERID" oninput="this.value = this.value.toUpperCase()"> -->
-            <!-- <input type="text" id="user_id" placeholder="USERID" > -->
-
+           
             <select id="user_id">
                 <option value="">-- Select USER ID --</option>
                 <option value="SAADMIN">SAADMIN</option>
@@ -408,7 +406,8 @@ margin-top: 1%;
     <div class="pad-row">
         <button class="pad-btn">0</button>
         <button class="pad-btn" id="clear">←</button>
-        <button class="pad-btn" id="done" onclick="handleLogin()">✔</button>
+        <button class="pad-btn" id="done">✔</button>
+
     </div>
 </div>
     
@@ -458,6 +457,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+
+// Handle dynamic action for ✔ button
+document.getElementById("done").addEventListener("click", function() {
+    const authSection = document.getElementById("authSection");
+    if (authSection && authSection.style.display === "block") {
+        // When authSection is visible → close app
+        closeApp();
+    } else {
+        // When login section is visible → handle login
+        handleLogin();
+    }
+});
+
 
 
 
@@ -1038,3 +1051,44 @@ function handleLogin() {
 </script>
 </body>
 </html>
+
+
+
+
+   <style>
+/* Make everything non-selectable by default */
+* {
+    -webkit-user-select: none !important; 
+    -moz-user-select: none !important;    
+    -ms-user-select: none !important;     
+    user-select: none !important;         
+    -webkit-user-drag: none !important;   
+    -webkit-tap-highlight-color: transparent !important; 
+    outline: none !important;
+}
+
+/* Keep focus styles removed */
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+*:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+</style>
+
+<script>
+// Helper: check if event target is one of the allowed inputs
+function isEditableArea(target) {
+    const allowedIds = ['user_id','password','pass'];
+    return allowedIds.includes(target.id);
+}
+
+// Disable selection / dragging except allowed areas
+document.addEventListener('selectstart', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('mousedown', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('mouseup', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('dragstart', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+document.addEventListener('contextmenu', e => { if (!isEditableArea(e.target)) e.preventDefault(); });
+</script>
